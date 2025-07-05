@@ -1,0 +1,132 @@
+# Blackbox Exporter 配置文件
+modules:
+  # HTTP 2xx 检查
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: [200, 201, 202]
+      method: GET
+      headers:
+        Host: localhost
+        Accept-Language: en-US
+      no_follow_redirects: false
+      fail_if_ssl: false
+      fail_if_not_ssl: false
+      tls_config:
+        insecure_skip_verify: false
+      preferred_ip_protocol: "ip4"
+
+  # HTTP POST 检查
+  http_post_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{"test": true}'
+      valid_status_codes: [200, 201, 202]
+
+  # HTTP 基本认证检查
+  http_basic_auth:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+      valid_status_codes: [200]
+      basic_auth:
+        username: "admin"
+        password: "password"
+
+  # HTTPS 检查
+  http_2xx_ssl:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+      valid_status_codes: [200]
+      tls_config:
+        insecure_skip_verify: false
+      preferred_ip_protocol: "ip4"
+
+  # TCP 连接检查
+  tcp_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: "ip4"
+
+  # MySQL TCP 检查
+  tcp_mysql:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: "ip4"
+      query_response:
+        - expect: "^\\x00\\x00\\x00\\x0a"  # MySQL握手包
+
+  # Redis TCP 检查
+  tcp_redis:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: "ip4"
+      query_response:
+        - send: "PING\r\n"
+        - expect: "PONG"
+
+  # ICMP 检查
+  icmp:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: "ip4"
+      source_ip_address: "0.0.0.0"
+
+  # DNS 检查
+  dns_udp:
+    prober: dns
+    timeout: 5s
+    dns:
+      query_name: "localhost"
+      query_type: "A"
+      valid_rcodes:
+        - NOERROR
+      validate_answer_rrs:
+        fail_if_matches_regexp:
+          - ".*127.0.0.1"
+        fail_if_not_matches_regexp:
+          - ".*"
+      preferred_ip_protocol: "ip4"
+
+  # DNS TCP 检查
+  dns_tcp:
+    prober: dns
+    timeout: 5s
+    dns:
+      transport_protocol: "tcp"
+      preferred_ip_protocol: "ip4"
+      query_name: "localhost"
+      query_type: "A"
+
+  # gRPC 检查
+  grpc:
+    prober: grpc
+    timeout: 5s
+    grpc:
+      service: "health"
+      tls: false
+      preferred_ip_protocol: "ip4"
+
+  # gRPC TLS 检查
+  grpc_tls:
+    prober: grpc
+    timeout: 5s
+    grpc:
+      service: "health"
+      tls: true
+      tls_config:
+        insecure_skip_verify: false
+      preferred_ip_protocol: "ip4"

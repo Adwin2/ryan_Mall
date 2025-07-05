@@ -1,0 +1,162 @@
+version: '3.8'
+
+services:
+  # Prometheus 监控服务
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: ryan-mall-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    networks:
+      - ryan-mall-monitoring
+
+  # Grafana 可视化服务
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: ryan-mall-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - ryan-mall-monitoring
+    depends_on:
+      - prometheus
+
+  # Node Exporter 系统监控
+  node-exporter:
+    image: prom/node-exporter:v1.6.0
+    container_name: ryan-mall-node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - ryan-mall-monitoring
+
+  # Redis Exporter Redis监控
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.52.0
+    container_name: ryan-mall-redis-exporter
+    restart: unless-stopped
+    ports:
+      - "9121:9121"
+    environment:
+      - REDIS_ADDR=redis://ryan-mall-redis-node-1:6379
+      - REDIS_EXPORTER_INCL_SYSTEM_METRICS=true
+    networks:
+      - ryan-mall-monitoring
+      - ryan_mall_ryan-mall-cluster
+    depends_on:
+      - prometheus
+
+  # MySQL Exporter MySQL监控
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.15.0
+    container_name: ryan-mall-mysql-exporter
+    restart: unless-stopped
+    ports:
+      - "9104:9104"
+    environment:
+      - DATA_SOURCE_NAME=root:123456@(ryan-mall-mysql:3306)/ryan_mall
+    networks:
+      - ryan-mall-monitoring
+      - ryan_mall_ryan-mall-cluster
+    depends_on:
+      - prometheus
+
+  # cAdvisor 容器监控
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: ryan-mall-cadvisor
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    networks:
+      - ryan-mall-monitoring
+
+  # AlertManager 告警管理
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    container_name: ryan-mall-alertmanager
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    networks:
+      - ryan-mall-monitoring
+    depends_on:
+      - prometheus
+
+  # Blackbox Exporter 黑盒监控
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.24.0
+    container_name: ryan-mall-blackbox-exporter
+    restart: unless-stopped
+    ports:
+      - "9115:9115"
+    volumes:
+      - ./monitoring/blackbox/blackbox.yml:/etc/blackbox_exporter/config.yml
+    networks:
+      - ryan-mall-monitoring
+    depends_on:
+      - prometheus
+
+networks:
+  ryan-mall-monitoring:
+    driver: bridge
+    name: ryan-mall-monitoring
+  ryan_mall_ryan-mall-cluster:
+    external: true
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local

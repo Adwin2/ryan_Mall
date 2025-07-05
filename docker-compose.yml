@@ -1,0 +1,77 @@
+# Docker Compose 配置文件
+# 用于快速启动开发环境所需的服务
+
+version: '3.8'
+
+services:
+  # MySQL 数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: ryan-mall-mysql
+    restart: always
+    environment:
+      # 设置root用户密码
+      MYSQL_ROOT_PASSWORD: 123456
+      # 创建应用数据库
+      MYSQL_DATABASE: ryan_mall
+      # 设置字符集
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      # 映射端口：主机端口:容器端口
+      - "3306:3306"
+    volumes:
+      # 数据持久化：将数据存储在本地目录
+      - mysql_data:/var/lib/mysql
+      # 配置文件挂载
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    command:
+      # MySQL启动参数
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - ryan-mall-network
+
+  # Redis 缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: ryan-mall-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      # Redis数据持久化
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - ryan-mall-network
+
+  # phpMyAdmin 数据库管理工具（可选）
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ryan-mall-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: 123456
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - ryan-mall-network
+
+# 数据卷定义
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# 网络定义
+networks:
+  ryan-mall-network:
+    driver: bridge
