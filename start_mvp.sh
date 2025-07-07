@@ -43,7 +43,8 @@ start_mvp_services() {
     
     # 启动MySQL、Redis和前端
     echo -e "${YELLOW}启动数据库和前端服务...${NC}"
-    docker compose up -d mysql redis frontend
+    docker compose up -d mysql redis 
+    #frontend
     
     # 等待MySQL启动
     echo -e "${YELLOW}等待MySQL启动...${NC}"
@@ -92,22 +93,12 @@ show_status() {
         echo -e "   ❌ Redis: 未运行"
     fi
     
-    if docker ps | grep -q ryan-mall-frontend; then
-        echo -e "   ✅ 前端: 运行中 (端口 8080)"
-    else
-        echo -e "   ❌ 前端: 未运行"
-    fi
+    # if docker ps | grep -q ryan-mall-frontend; then
+    #     echo -e "   ✅ 前端: 运行中 (端口 8080)"
+    # else
+    #     echo -e "   ❌ 前端: 未运行"
+    # fi
     
-    echo ""
-    echo -e "${BLUE}🌐 访问地址:${NC}"
-    echo -e "   前端主页: http://localhost:8080"
-    echo -e "   登录页面: http://localhost:8080/views/login.html"
-    echo -e "   商品页面: http://localhost:8080/views/products.html"
-    echo -e "   购物车: http://localhost:8080/views/cart.html"
-    echo -e "   订单管理: http://localhost:8080/views/orders.html"
-    echo -e "   管理后台: http://localhost:8080/admin/dashboard.html"
-    echo -e "   API测试: http://localhost:8080/views/test-api.html"
-    echo ""
     echo -e "${YELLOW}⚠️ 下一步: 启动后端API服务${NC}"
     echo -e "   启动命令: ${BLUE}go run ./cmd/server/main.go${NC}"
     echo -e "   后端端口: ${BLUE}8081${NC}"
@@ -115,11 +106,6 @@ show_status() {
     echo -e "${GREEN}🧪 演示账户:${NC}"
     echo -e "   管理员: admin / admin123"
     echo -e "   用户: user1 / password123"
-    echo ""
-    echo -e "${BLUE}💡 提示:${NC}"
-    echo -e "   1. 先启动后端API服务"
-    echo -e "   2. 访问登录页面进行登录"
-    echo -e "   3. 体验完整的购物流程"
     echo ""
 }
 
@@ -144,7 +130,7 @@ show_help() {
     echo "  --status       显示服务状态"
     echo ""
     echo "示例:"
-    echo "  $0              # 启动MVP服务"
+    echo "  $0              # 启动服务"
     echo "  $0 --stop       # 停止所有服务"
     echo "  $0 --restart    # 重启所有服务"
 }
