@@ -14,11 +14,10 @@
 
 ### 核心功能
 
-- 🛒 **商品管理**: 商品展示、分类管理、搜索筛选
-- 👤 **用户系统**: 注册登录、个人中心、权限管理
-- 🛍️ **购物车**: 添加商品、数量调整、实时更新
-- 📦 **订单系统**: 订单创建、状态跟踪、支付管理
-- 📊 **管理后台**: 数据统计、订单管理、系统监控
+-  **商品管理**: 商品展示、分类管理、搜索筛选
+-  **用户系统**: 注册登录、个人中心、权限管理
+-  **购物车**: 添加商品、数量调整、实时更新
+-  **订单系统**: 订单创建、状态跟踪、支付管理
 
 ## 🚀 快速开始
 
@@ -74,31 +73,6 @@ go run cmd/server/main.go
 └─────────────────┘
 ```
 
-## 📊 核心特性
-
-### 前端特性
-
-- **响应式设计**: 完全适配移动端和桌面端
-- **现代化UI**: Bootstrap 5 + 自定义CSS
-- **实时交互**: JavaScript原生开发，无框架依赖
-- **用户体验**: Toast通知、加载状态、错误处理
-
-### 后端特性
-
-- **RESTful API**: 标准REST API设计
-- **JWT认证**: 安全的用户认证机制
-- **数据缓存**: Redis缓存提升性能
-- **错误处理**: 统一的错误响应格式
-
-### 数据库设计
-
-- **用户表**: users (用户基本信息)
-- **商品表**: products (商品信息)
-- **分类表**: categories (商品分类)
-- **购物车**: cart_items (购物车项)
-- **订单表**: orders (订单主表)
-- **订单项**: order_items (订单详情)
-
 ## 🔧 开发指南
 
 ### 项目结构
@@ -122,35 +96,6 @@ ryan_Mall/
 │   └── static/        # 静态资源
 ├── docker/            # Docker配置
 └── tests/             # 测试文件
-```
-
-### API端点
-
-```http
-# 用户认证
-POST /api/v1/register   # 用户注册
-POST /api/v1/login      # 用户登录
-GET  /api/v1/profile    # 获取用户信息
-
-# 商品管理
-GET  /api/v1/products   # 获取商品列表
-GET  /api/v1/products/:id # 获取商品详情
-GET  /api/v1/categories # 获取分类列表
-
-# 购物车
-POST /api/v1/cart       # 添加到购物车
-GET  /api/v1/cart       # 获取购物车
-PUT  /api/v1/cart/:id   # 更新购物车项
-DELETE /api/v1/cart/:id # 删除购物车项
-
-# 订单管理
-POST /api/v1/orders     # 创建订单
-GET  /api/v1/orders     # 获取订单列表
-GET  /api/v1/orders/:id # 获取订单详情
-
-# AI助手
-POST /api/v1/ai/chat    # AI聊天接口
-GET /api/v1/ai/chat
 ```
 
 ### API测试
