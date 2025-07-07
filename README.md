@@ -34,8 +34,11 @@ cd ryan_Mall
 # 启动MVP服务
 ./start_mvp.sh
 
+# 启动AI服务
+cd eino-minimal/ && go run ./main.go
+
 # 在新终端启动后端API
-go run cmd/server/main.go
+SERVER_PORT=8082 go run cmd/server/main.go
 ```
 
 ### 访问地址
@@ -177,7 +180,7 @@ GET  /api/v1/orders/:id # 获取订单详情
 # 启动MVP服务
 ./start_mvp.sh
 
-# 启动后端API
+# 启动后端API （或者自行配置使用Air热加载工具）
 go run cmd/server/main.go
 ```
 

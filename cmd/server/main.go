@@ -79,6 +79,7 @@ func main() {
 	categoryService := service.NewCategoryService(categoryRepo)
 	cartService := service.NewCartService(cartRepo, productRepo)
 	orderService := service.NewOrderService(orderRepo, cartRepo, productRepo, database.GetDB())
+	aiService := service.NewAIService()
 
 	// 创建HTTP处理器
 	userHandler := handler.NewUserHandler(userService)
@@ -86,6 +87,7 @@ func main() {
 	categoryHandler := handler.NewCategoryHandler(categoryService)
 	cartHandler := handler.NewCartHandler(cartService)
 	orderHandler := handler.NewOrderHandler(orderService)
+	aiHandler := handler.NewAIHandler(aiService)
 
 
 
@@ -146,6 +148,9 @@ func main() {
 
 		// 注册订单相关路由
 		orderHandler.RegisterRoutes(v1, authMiddleware)
+
+		// 注册AI相关路由
+		aiHandler.RegisterRoutes(v1, authMiddleware)
 
 		// 临时测试路由
 		v1.GET("/test", func(c *gin.Context) {

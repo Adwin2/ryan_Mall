@@ -1,0 +1,8 @@
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"\n你好！很高兴能为你提供帮助。如果你有任何问题或需要协助的地方，随时都可以告诉我哦。","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":171,"completion_tokens":92,"total_tokens":263}},"extra":{"ark-reasoning-content":"用户只是简单地打招呼“你好”，这是一个日常问候交流的内容，当前提供的工具`ParseFileURL`主要用于从URL中获取文件内容并解析，与用户的问候需求不匹配，无法通过该工具来回应，所以直接进行友好的问候回复即可。\n","ark-request-id":"021751883333975978dd60cc0e61d73e408f640cba36111265de1"}}
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"\n你好呀！有什么我可以帮助你的吗？","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":210,"completion_tokens":71,"total_tokens":281}},"extra":{"ark-reasoning-content":"用户此次输入为“你好”，是简单的问候内容，当前提供的工具“ParseFileURL”主要用于从URL中获取文件内容并解析，与用户的问候需求不匹配，无法使用该工具来回答，直接进行友好回应即可。\n","ark-request-id":"021751888832747c7e374c77c0154ad6f1595e4e170df67e19c60"}}
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"\n你好！很高兴再次见到你，有什么我可以为你效劳的吗？","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":235,"completion_tokens":78,"total_tokens":313}},"extra":{"ark-reasoning-content":"用户只是再次打招呼“你好”，当前需求是友好回应，而提供的工具“ParseFileURL”功能是从URL中获取文件内容并解析，与用户当前打招呼的需求不匹配，无法使用该工具来回答，直接友好回应用户即可。\n","ark-request-id":"021751888955145bd9c19bb55201b5e3b0a85ccbcb54b53488d65"}}
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"\n你好呀！今天有什么需要我帮忙的吗？无论是解答问题、提供建议，还是闲聊，我都在这里哦。","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":266,"completion_tokens":80,"total_tokens":346}},"extra":{"ark-reasoning-content":"用户只是再次打招呼“你好”，当前提供的工具“ParseFileURL”是用于从URL中获取文件内容并解析的，用户的问题与该工具功能不匹配，不需要使用工具，直接友好回应即可。\n","ark-request-id":"021751889052746517b6057b73d57766c260a6d9422effc5e44ef"}}
