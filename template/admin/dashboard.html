@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - Ryan Mall</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <style>
+        .admin-sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .admin-sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 10px;
+            transition: all 0.3s;
+        }
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .admin-content {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .stats-card.primary { border-left-color: #007bff; }
+        .stats-card.success { border-left-color: #28a745; }
+        .stats-card.warning { border-left-color: #ffc107; }
+        .stats-card.info { border-left-color: #17a2b8; }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        .stats-icon.primary { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .stats-icon.success { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        .stats-icon.warning { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .stats-icon.info { background: linear-gradient(135deg, #17a2b8, #138496); }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .recent-orders {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .order-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .admin-header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <div class="col-md-3 col-lg-2 admin-sidebar">
+                <div class="p-3">
+                    <h4 class="text-center mb-4">
+                        <i class="bi bi-shield-check"></i> 管理后台
+                    </h4>
+                    
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#dashboard" onclick="showSection('dashboard')">
+                            <i class="bi bi-speedometer2"></i> 仪表板
+                        </a>
+                        <a class="nav-link" href="#products" onclick="showSection('products')">
+                            <i class="bi bi-box-seam"></i> 商品管理
+                        </a>
+                        <a class="nav-link" href="#orders" onclick="showSection('orders')">
+                            <i class="bi bi-receipt"></i> 订单管理
+                        </a>
+                        <a class="nav-link" href="#users" onclick="showSection('users')">
+                            <i class="bi bi-people"></i> 用户管理
+                        </a>
+                        <a class="nav-link" href="#categories" onclick="showSection('categories')">
+                            <i class="bi bi-tags"></i> 分类管理
+                        </a>
+                        <a class="nav-link" href="#analytics" onclick="showSection('analytics')">
+                            <i class="bi bi-graph-up"></i> 数据分析
+                        </a>
+                        <hr class="my-3">
+                        <a class="nav-link" href="../views/index.html">
+                            <i class="bi bi-house"></i> 返回前台
+                        </a>
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i> 退出登录
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="col-md-9 col-lg-10 admin-content">
+                <!-- 头部 -->
+                <div class="admin-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h2 id="sectionTitle">仪表板</h2>
+                                <p class="text-muted mb-0" id="sectionDesc">系统概览和关键指标</p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <span class="text-muted">欢迎，<span id="adminUsername">管理员</span></span>
+                                <button class="btn btn-outline-primary ms-3" onclick="refreshData()">
+                                    <i class="bi bi-arrow-clockwise"></i> 刷新数据
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <!-- 仪表板内容 -->
+                    <div id="dashboardSection">
+                        <!-- 统计卡片 -->
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="stats-card primary">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon primary">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h3 class="mb-0" id="totalProducts">0</h3>
+                                            <p class="text-muted mb-0">商品总数</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="stats-card success">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon success">
+                                            <i class="bi bi-receipt"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h3 class="mb-0" id="totalOrders">0</h3>
+                                            <p class="text-muted mb-0">订单总数</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="stats-card warning">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon warning">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h3 class="mb-0" id="totalUsers">0</h3>
+                                            <p class="text-muted mb-0">用户总数</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="stats-card info">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stats-icon info">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h3 class="mb-0" id="totalRevenue">¥0</h3>
+                                            <p class="text-muted mb-0">总收入</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 图表和最近订单 -->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="chart-container">
+                                    <h5 class="mb-4">销售趋势</h5>
+                                    <div id="salesChart" style="height: 300px; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                                        <div class="text-center">
+                                            <i class="bi bi-graph-up display-1"></i>
+                                            <p class="mt-3">图表功能开发中...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="recent-orders">
+                                    <h5 class="mb-4">最近订单</h5>
+                                    <div id="recentOrdersList">
+                                        <!-- 最近订单将通过JavaScript动态生成 -->
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <a href="#orders" class="btn btn-outline-primary btn-sm" onclick="showSection('orders')">
+                                            查看全部订单
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 其他功能区域（暂时隐藏） -->
+                    <div id="productsSection" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-box-seam display-1 text-muted"></i>
+                            <h3 class="mt-4 text-muted">商品管理</h3>
+                            <p class="text-muted">功能开发中...</p>
+                        </div>
+                    </div>
+
+                    <div id="ordersSection" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-receipt display-1 text-muted"></i>
+                            <h3 class="mt-4 text-muted">订单管理</h3>
+                            <p class="text-muted">功能开发中...</p>
+                        </div>
+                    </div>
+
+                    <div id="usersSection" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-people display-1 text-muted"></i>
+                            <h3 class="mt-4 text-muted">用户管理</h3>
+                            <p class="text-muted">功能开发中...</p>
+                        </div>
+                    </div>
+
+                    <div id="categoriesSection" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-tags display-1 text-muted"></i>
+                            <h3 class="mt-4 text-muted">分类管理</h3>
+                            <p class="text-muted">功能开发中...</p>
+                        </div>
+                    </div>
+
+                    <div id="analyticsSection" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-graph-up display-1 text-muted"></i>
+                            <h3 class="mt-4 text-muted">数据分析</h3>
+                            <p class="text-muted">功能开发中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script>
+        // API基础URL
+        const API_BASE = 'http://localhost:8081/api/v1';
+        
+        // 当前活动的区域
+        let currentSection = 'dashboard';
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            loadDashboardData();
+        });
+
+        // 检查管理员权限
+        function checkAdminAuth() {
+            if (!AuthManager.isLoggedIn()) {
+                window.location.href = '../views/login.html';
+                return;
+            }
+            
+            const username = AuthManager.getUsername();
+            document.getElementById('adminUsername').textContent = username;
+            
+            // 这里可以添加管理员权限验证
+            if (username !== 'admin') {
+                alert('您没有管理员权限');
+                window.location.href = '../views/index.html';
+                return;
+            }
+        }
+
+        // 显示指定区域
+        function showSection(sectionName) {
+            // 隐藏所有区域
+            document.querySelectorAll('[id$="Section"]').forEach(section => {
+                section.classList.add('d-none');
+            });
+            
+            // 显示指定区域
+            document.getElementById(sectionName + 'Section').classList.remove('d-none');
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[href="#${sectionName}"]`).classList.add('active');
+            
+            // 更新标题
+            const titles = {
+                'dashboard': { title: '仪表板', desc: '系统概览和关键指标' },
+                'products': { title: '商品管理', desc: '管理商品信息和库存' },
+                'orders': { title: '订单管理', desc: '处理和跟踪订单' },
+                'users': { title: '用户管理', desc: '管理用户账户和权限' },
+                'categories': { title: '分类管理', desc: '管理商品分类' },
+                'analytics': { title: '数据分析', desc: '查看销售和用户数据' }
+            };
+            
+            if (titles[sectionName]) {
+                document.getElementById('sectionTitle').textContent = titles[sectionName].title;
+                document.getElementById('sectionDesc').textContent = titles[sectionName].desc;
+            }
+            
+            currentSection = sectionName;
+        }
+
+        // 加载仪表板数据
+        async function loadDashboardData() {
+            try {
+                // 模拟数据，实际应该调用API
+                await loadStatistics();
+                await loadRecentOrders();
+            } catch (error) {
+                console.error('加载仪表板数据失败:', error);
+                Utils.showToast('加载数据失败', 'danger');
+            }
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                // 这里应该调用实际的统计API
+                // 暂时使用模拟数据
+                const stats = {
+                    totalProducts: 156,
+                    totalOrders: 89,
+                    totalUsers: 234,
+                    totalRevenue: 12580.50
+                };
+
+                document.getElementById('totalProducts').textContent = stats.totalProducts;
+                document.getElementById('totalOrders').textContent = stats.totalOrders;
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('totalRevenue').textContent = `¥${stats.totalRevenue.toFixed(2)}`;
+
+                // 添加动画效果
+                animateNumbers();
+            } catch (error) {
+                console.error('加载统计数据失败:', error);
+            }
+        }
+
+        // 加载最近订单
+        async function loadRecentOrders() {
+            try {
+                const response = await api.get('/orders', { page: 1, page_size: 5 });
+                
+                if (response.code === 200 && response.data.orders) {
+                    renderRecentOrders(response.data.orders);
+                } else {
+                    document.getElementById('recentOrdersList').innerHTML = '<p class="text-muted">暂无订单数据</p>';
+                }
+            } catch (error) {
+                console.error('加载最近订单失败:', error);
+                document.getElementById('recentOrdersList').innerHTML = '<p class="text-muted">加载失败</p>';
+            }
+        }
+
+        // 渲染最近订单
+        function renderRecentOrders(orders) {
+            const container = document.getElementById('recentOrdersList');
+            
+            if (orders.length === 0) {
+                container.innerHTML = '<p class="text-muted">暂无订单</p>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="order-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${order.order_no}</h6>
+                            <small class="text-muted">${Utils.formatDate(order.created_at)}</small>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-primary">¥${order.total_amount}</div>
+                            <span class="badge bg-${getStatusColor(order.status)}">${getStatusText(order.status)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 获取状态颜色
+        function getStatusColor(status) {
+            const colorMap = {
+                'pending': 'warning',
+                'paid': 'info',
+                'shipped': 'primary',
+                'delivered': 'success',
+                'cancelled': 'danger'
+            };
+            return colorMap[status] || 'secondary';
+        }
+
+        // 获取状态文本
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': '待支付',
+                'paid': '已支付',
+                'shipped': '已发货',
+                'delivered': '已完成',
+                'cancelled': '已取消'
+            };
+            return statusMap[status] || status;
+        }
+
+        // 数字动画效果
+        function animateNumbers() {
+            const elements = ['totalProducts', 'totalOrders', 'totalUsers'];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                const target = parseInt(element.textContent);
+                let current = 0;
+                const increment = target / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current);
+                }, 30);
+            });
+        }
+
+        // 刷新数据
+        function refreshData() {
+            Utils.showToast('正在刷新数据...', 'info');
+            loadDashboardData();
+        }
+
+        // 退出登录
+        function logout() {
+            AuthManager.logout();
+        }
+    </script>
+</body>
+</html>

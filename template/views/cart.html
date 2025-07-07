@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车 - Ryan Mall</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <style>
+        .cart-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .cart-item {
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .product-image {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quantity-btn:hover {
+            background: #f8f9fa;
+            border-color: #007bff;
+        }
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 8px;
+        }
+        .cart-summary {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .summary-total {
+            border-top: 2px solid #dee2e6;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 80px 20px;
+            color: #6c757d;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .checkout-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="bi bi-shop"></i> Ryan Mall</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">商品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="cart.html">购物车</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" id="loginLink"><i class="bi bi-person"></i> 登录</a>
+                    </li>
+                    <li class="nav-item d-none" id="userMenu">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> <span id="username"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="orders.html">我的订单</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">退出登录</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面头部 -->
+    <section class="cart-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="bi bi-cart3"></i> 我的购物车</h1>
+                    <p class="mb-0">管理您的购物车商品，随时调整数量或移除商品</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <button class="btn btn-outline-light" onclick="clearCart()">
+                        <i class="bi bi-trash"></i> 清空购物车
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要内容 -->
+    <div class="container my-5">
+        <!-- 加载状态 -->
+        <div class="loading" id="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-3">正在加载购物车...</p>
+        </div>
+
+        <!-- 购物车内容 -->
+        <div class="row" id="cartContent">
+            <!-- 购物车商品列表 -->
+            <div class="col-lg-8">
+                <div id="cartItems">
+                    <!-- 购物车商品将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 购物车汇总 -->
+            <div class="col-lg-4">
+                <div class="cart-summary" id="cartSummary">
+                    <h5 class="mb-4"><i class="bi bi-receipt"></i> 订单汇总</h5>
+                    
+                    <div class="summary-row">
+                        <span>商品数量:</span>
+                        <span id="totalItems">0 件</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>商品总价:</span>
+                        <span id="subtotal">¥0.00</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>运费:</span>
+                        <span id="shipping">免费</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>优惠:</span>
+                        <span id="discount" class="text-success">-¥0.00</span>
+                    </div>
+                    
+                    <div class="summary-row summary-total">
+                        <span>总计:</span>
+                        <span id="total" class="text-primary">¥0.00</span>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-primary checkout-btn" onclick="proceedToCheckout()">
+                            <i class="bi bi-credit-card"></i> 立即结算
+                        </button>
+                        <a href="products.html" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> 继续购物
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 空购物车状态 -->
+        <div class="empty-cart d-none" id="emptyCart">
+            <i class="bi bi-cart-x display-1 text-muted"></i>
+            <h3 class="mt-4 text-muted">购物车是空的</h3>
+            <p class="text-muted">快去挑选您喜欢的商品吧！</p>
+            <a href="products.html" class="btn btn-primary btn-lg mt-3">
+                <i class="bi bi-shop"></i> 去购物
+            </a>
+        </div>
+    </div>
+
+    <!-- 推荐商品区域 -->
+    <section class="py-5 bg-light" id="recommendedSection">
+        <div class="container">
+            <h3 class="text-center mb-5">为您推荐</h3>
+            <div class="row" id="recommendedProducts">
+                <!-- 推荐商品将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/app.js"></script>
+    <script>
+        // API基础URL
+        const API_BASE = 'http://localhost:8081/api/v1';
+        
+        // 购物车数据
+        let cartData = null;
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            loadCart();
+        });
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            if (!AuthManager.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            updateNavbarUserStatus();
+        }
+
+        // 加载购物车
+        async function loadCart() {
+            showLoading(true);
+            
+            try {
+                const response = await api.get('/cart');
+                
+                if (response.code === 200) {
+                    cartData = response.data;
+                    renderCart();
+                } else {
+                    showError('加载购物车失败: ' + response.message);
+                }
+            } catch (error) {
+                console.error('加载购物车失败:', error);
+                showError('网络错误，请稍后重试');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // 渲染购物车
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartContent = document.getElementById('cartContent');
+            const emptyCart = document.getElementById('emptyCart');
+            const recommendedSection = document.getElementById('recommendedSection');
+
+            if (!cartData || !cartData.items || cartData.items.length === 0) {
+                cartContent.classList.add('d-none');
+                emptyCart.classList.remove('d-none');
+                recommendedSection.style.display = 'block';
+                loadRecommendedProducts();
+                return;
+            }
+
+            cartContent.classList.remove('d-none');
+            emptyCart.classList.add('d-none');
+            recommendedSection.style.display = 'none';
+
+            // 渲染购物车商品
+            cartItems.innerHTML = cartData.items.map(item => `
+                <div class="cart-item" data-item-id="${item.id}">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <div class="product-image">
+                                <i class="bi bi-image display-6"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="mb-1">${item.product.name}</h6>
+                            <p class="text-muted small mb-1">${item.product.description || '暂无描述'}</p>
+                            <span class="badge bg-secondary">${item.product.category?.name || '未分类'}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-center">
+                                <div class="fw-bold text-primary">¥${item.product.price}</div>
+                                <small class="text-muted">单价</small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="number" class="quantity-input" value="${item.quantity}" 
+                                       min="1" max="${item.product.stock}" 
+                                       onchange="updateQuantity(${item.id}, this.value)">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted d-block text-center mt-1">库存: ${item.product.stock}</small>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="text-center">
+                                <div class="fw-bold">¥${(item.product.price * item.quantity).toFixed(2)}</div>
+                                <small class="text-muted">小计</small>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-outline-danger btn-sm" onclick="removeItem(${item.id})" title="移除商品">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 更新汇总信息
+            updateSummary();
+        }
+
+        // 更新汇总信息
+        function updateSummary() {
+            if (!cartData || !cartData.items) return;
+
+            const totalItems = cartData.items.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cartData.items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+            const shipping = subtotal >= 99 ? 0 : 10; // 满99免运费
+            const discount = 0; // 暂时没有优惠
+            const total = subtotal + shipping - discount;
+
+            document.getElementById('totalItems').textContent = `${totalItems} 件`;
+            document.getElementById('subtotal').textContent = `¥${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? '免费' : `¥${shipping.toFixed(2)}`;
+            document.getElementById('discount').textContent = `-¥${discount.toFixed(2)}`;
+            document.getElementById('total').textContent = `¥${total.toFixed(2)}`;
+        }
+
+        // 更新商品数量
+        async function updateQuantity(itemId, newQuantity) {
+            newQuantity = parseInt(newQuantity);
+            
+            if (newQuantity < 1) {
+                if (await Utils.showConfirm('确定要移除这个商品吗？', '确认移除')) {
+                    removeItem(itemId);
+                }
+                return;
+            }
+
+            try {
+                const response = await api.put(`/cart/${itemId}`, {
+                    quantity: newQuantity
+                });
+
+                if (response.code === 200) {
+                    Utils.showToast('数量更新成功', 'success');
+                    loadCart(); // 重新加载购物车
+                } else {
+                    Utils.showToast(response.message || '更新失败', 'danger');
+                }
+            } catch (error) {
+                console.error('更新数量失败:', error);
+                Utils.showToast('网络错误，请稍后重试', 'danger');
+            }
+        }
+
+        // 移除商品
+        async function removeItem(itemId) {
+            try {
+                const response = await api.delete(`/cart/${itemId}`);
+
+                if (response.code === 200) {
+                    Utils.showToast('商品已移除', 'success');
+                    loadCart(); // 重新加载购物车
+                    CartManager.updateCartBadge(); // 更新购物车徽章
+                } else {
+                    Utils.showToast(response.message || '移除失败', 'danger');
+                }
+            } catch (error) {
+                console.error('移除商品失败:', error);
+                Utils.showToast('网络错误，请稍后重试', 'danger');
+            }
+        }
+
+        // 清空购物车
+        async function clearCart() {
+            if (!await Utils.showConfirm('确定要清空购物车吗？此操作不可撤销。', '确认清空')) {
+                return;
+            }
+
+            try {
+                const response = await api.delete('/cart');
+
+                if (response.code === 200) {
+                    Utils.showToast('购物车已清空', 'success');
+                    loadCart(); // 重新加载购物车
+                    CartManager.updateCartBadge(); // 更新购物车徽章
+                } else {
+                    Utils.showToast(response.message || '清空失败', 'danger');
+                }
+            } catch (error) {
+                console.error('清空购物车失败:', error);
+                Utils.showToast('网络错误，请稍后重试', 'danger');
+            }
+        }
+
+        // 进入结算
+        function proceedToCheckout() {
+            if (!cartData || !cartData.items || cartData.items.length === 0) {
+                Utils.showToast('购物车是空的', 'warning');
+                return;
+            }
+
+            // 跳转到订单页面
+            window.location.href = 'orders.html?action=create';
+        }
+
+        // 加载推荐商品
+        async function loadRecommendedProducts() {
+            try {
+                const response = await api.get('/products', { limit: 4, sort: 'created_at desc' });
+                
+                if (response.code === 200 && response.data.products) {
+                    renderRecommendedProducts(response.data.products);
+                }
+            } catch (error) {
+                console.error('加载推荐商品失败:', error);
+            }
+        }
+
+        // 渲染推荐商品
+        function renderRecommendedProducts(products) {
+            const container = document.getElementById('recommendedProducts');
+            
+            container.innerHTML = products.map(product => `
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <div class="product-image" style="height: 200px;">
+                            <i class="bi bi-image display-4"></i>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">${product.name}</h6>
+                            <p class="card-text text-muted small">${product.description || '暂无描述'}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price">¥${product.price}</span>
+                                <button class="btn btn-primary btn-sm" onclick="addToCartFromRecommended(${product.id})">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 从推荐商品添加到购物车
+        async function addToCartFromRecommended(productId) {
+            const success = await CartManager.addToCart(productId, 1);
+            if (success) {
+                loadCart(); // 重新加载购物车
+            }
+        }
+
+        // 显示/隐藏加载状态
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            document.getElementById('cartItems').innerHTML = `
+                <div class="text-center py-5">
+                    <i class="bi bi-exclamation-triangle display-1 text-warning"></i>
+                    <h4 class="text-muted mt-3">加载失败</h4>
+                    <p class="text-muted">${message}</p>
+                    <button class="btn btn-primary" onclick="loadCart()">重新加载</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

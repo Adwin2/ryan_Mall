@@ -49,17 +49,17 @@ func main() {
 	log.Println("✅ 分片缓存系统初始化完成 (16分片，性能优化)")
 
 	// 5. 初始化Redis集群（如果启用）
-	var redisCluster interface{}
-	if cfg.Redis.ClusterEnabled && len(cfg.Redis.ClusterNodes) > 0 {
-		log.Println("🔗 初始化Redis集群...")
-		// 这里暂时注释掉，因为需要先启动集群
-		// redisCluster = redisManager.NewClusterManager(cfg.Redis.ClusterNodes, cfg.Redis.Password)
-		// log.Printf("✅ Redis集群初始化完成，节点数: %d", len(cfg.Redis.ClusterNodes))
-		log.Println("⚠️  Redis集群配置已检测到，但暂未启用（需要先启动集群）")
-	} else {
-		log.Println("📝 使用内存缓存模式（Redis集群未启用）")
-	}
-	_ = redisCluster // 避免未使用变量警告
+	// var redisCluster interface{}
+	// if cfg.Redis.ClusterEnabled && len(cfg.Redis.ClusterNodes) > 0 {
+	// 	log.Println("🔗 初始化Redis集群...")
+	// 	// 这里暂时注释掉，因为需要先启动集群
+	// 	// redisCluster = redisManager.NewClusterManager(cfg.Redis.ClusterNodes, cfg.Redis.Password)
+	// 	// log.Printf("✅ Redis集群初始化完成，节点数: %d", len(cfg.Redis.ClusterNodes))
+	// 	log.Println("⚠️  Redis集群配置已检测到，但暂未启用（需要先启动集群）")
+	// } else {
+	// 	log.Println("📝 使用内存缓存模式（Redis集群未启用）")
+	// }
+	// _ = redisCluster // 避免未使用变量警告
 
 	// 5. 初始化依赖组件
 	// 创建JWT管理器
@@ -87,8 +87,7 @@ func main() {
 	cartHandler := handler.NewCartHandler(cartService)
 	orderHandler := handler.NewOrderHandler(orderService)
 
-	// 创建监控处理器
-	metricsHandler := handler.NewMetricsHandler(nil, productService)
+
 
 	// 创建中间件
 	authMiddleware := middleware.NewAuthMiddleware(userService)
@@ -105,7 +104,17 @@ func main() {
 	// 添加CORS中间件
 	r.Use(middleware.CORS())
 
-	// 6. 设置基础路由
+	// 6. 设置静态文件服务
+	// 提供前端模板文件服务
+	r.Static("/static", "./template/static")
+	r.StaticFile("/", "./template/views/index.html")
+	r.StaticFile("/index.html", "./template/views/index.html")
+	r.StaticFile("/login.html", "./template/views/login.html")
+	r.StaticFile("/products.html", "./template/views/products.html")
+	r.StaticFile("/cart.html", "./template/views/cart.html")
+	r.StaticFile("/orders.html", "./template/views/orders.html")
+
+	// 7. 设置基础路由
 	// 这是一个健康检查接口，用于确认服务是否正常运行
 	r.GET("/ping", func(c *gin.Context) {
 		response.Success(c, gin.H{
@@ -114,12 +123,12 @@ func main() {
 		})
 	})
 
-	// 监控相关路由
-	r.GET("/health", metricsHandler.GetHealthCheck)
-	r.GET("/cache/stats", metricsHandler.GetCacheStats)
-	r.GET("/db/stats", metricsHandler.GetDBStats)
-	
-	// 7. 设置API路由组
+	// 健康检查路由
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok", "message": "service is healthy"})
+	})
+
+	// 8. 设置API路由组
 	// 使用路由组可以为一组路由添加统一的前缀和中间件
 	v1 := r.Group("/api/v1")
 	{
@@ -145,8 +154,8 @@ func main() {
 			})
 		})
 	}
-	
-	// 8. 启动服务器 - 优化HTTP服务器配置
+
+	// 9. 启动服务器 - 优化HTTP服务器配置
 	// 监听指定端口，开始处理HTTP请求
 	log.Printf("Server starting on port %s", cfg.Server.Port)
 	log.Printf("Health check: http://localhost:%s/ping", cfg.Server.Port)

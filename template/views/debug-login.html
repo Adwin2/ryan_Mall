@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录调试 - Ryan Mall</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .debug-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { border-color: #28a745; background: #d4edda; }
+        .error { border-color: #dc3545; background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1>登录功能调试</h1>
+        <p>这个页面用于调试登录功能的网络问题</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h3>登录测试</h3>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" value="admin">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" value="admin123">
+                    </div>
+                    <button type="submit" class="btn btn-primary">登录测试</button>
+                </form>
+                
+                <hr>
+                
+                <h4>快速测试</h4>
+                <button class="btn btn-info mb-2 w-100" onclick="testPing()">1. 测试后端连接</button>
+                <button class="btn btn-info mb-2 w-100" onclick="testCORS()">2. 测试CORS</button>
+                <button class="btn btn-info mb-2 w-100" onclick="testLogin()">3. 测试登录API</button>
+                <button class="btn btn-warning mb-2 w-100" onclick="clearLog()">清除日志</button>
+            </div>
+            
+            <div class="col-md-6">
+                <h3>调试日志</h3>
+                <div id="debugLog" class="debug-log"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API配置
+        const API_BASE = 'http://localhost:8081/api/v1';
+        
+        function addLog(message, isSuccess = true) {
+            const log = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = `debug-log ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = `[${timestamp}] ${message}`;
+            log.insertBefore(div, log.firstChild);
+        }
+        
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '';
+        }
+        
+        async function testPing() {
+            addLog('开始测试后端连接...');
+            try {
+                const response = await fetch('http://localhost:8081/ping');
+                const data = await response.json();
+                addLog(`✅ 后端连接成功: ${JSON.stringify(data)}`);
+            } catch (error) {
+                addLog(`❌ 后端连接失败: ${error.message}`, false);
+                console.error('Ping error:', error);
+            }
+        }
+        
+        async function testCORS() {
+            addLog('开始测试CORS...');
+            try {
+                const response = await fetch(`${API_BASE}/products`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                addLog(`✅ CORS测试成功，状态码: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog(`✅ 数据获取成功，商品数量: ${data.data?.total || 0}`);
+                }
+            } catch (error) {
+                addLog(`❌ CORS测试失败: ${error.message}`, false);
+                console.error('CORS error:', error);
+            }
+        }
+        
+        async function testLogin() {
+            addLog('开始测试登录API...');
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'admin',
+                        password: 'admin123'
+                    })
+                });
+                
+                addLog(`登录请求状态码: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog(`✅ 登录成功: ${data.message}`);
+                    addLog(`用户信息: ${data.data?.user?.username}`);
+                    addLog(`Token: ${data.data?.token?.substring(0, 50)}...`);
+                } else {
+                    const errorData = await response.json();
+                    addLog(`❌ 登录失败: ${errorData.message}`, false);
+                }
+            } catch (error) {
+                addLog(`❌ 登录请求失败: ${error.message}`, false);
+                addLog(`错误详情: ${error.stack}`, false);
+                console.error('Login error:', error);
+            }
+        }
+        
+        // 表单提交处理
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            addLog(`开始登录: 用户名=${username}`);
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                addLog(`登录响应状态: ${response.status} ${response.statusText}`);
+                addLog(`响应头: ${JSON.stringify([...response.headers.entries()])}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog(`✅ 登录成功!`);
+                    addLog(`响应数据: ${JSON.stringify(data, null, 2)}`);
+                    
+                    // 保存token
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('username', data.data.user.username);
+                    
+                    addLog(`✅ Token已保存到localStorage`);
+                } else {
+                    const errorText = await response.text();
+                    addLog(`❌ 登录失败: ${errorText}`, false);
+                }
+            } catch (error) {
+                addLog(`❌ 网络错误: ${error.message}`, false);
+                addLog(`错误类型: ${error.constructor.name}`, false);
+                addLog(`错误堆栈: ${error.stack}`, false);
+                console.error('Login form error:', error);
+            }
+        });
+        
+        // 页面加载时自动测试
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('页面加载完成，开始自动诊断...');
+            setTimeout(() => {
+                testPing();
+                setTimeout(() => {
+                    testCORS();
+                }, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

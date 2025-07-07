@@ -47,20 +47,20 @@ services:
     networks:
       - ryan-mall-network
 
-  # phpMyAdmin 数据库管理工具（可选）
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ryan-mall-phpmyadmin
+
+
+  # 前端Web服务器
+  frontend:
+    image: nginx:alpine
+    container_name: ryan-mall-frontend
     restart: always
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: 123456
     ports:
-      - "8081:80"
-    depends_on:
-      - mysql
+      - "8080:80"
+    volumes:
+      # 挂载前端模板文件
+      - ./template:/usr/share/nginx/html
+      # 挂载nginx配置
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - ryan-mall-network
 
