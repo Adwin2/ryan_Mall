@@ -1,4 +1,4 @@
-# Ryan Mall - 前后端电商MVP
+# Ryan Mall
 
 一个基于Go + Gin + MySQL + Redis的现代化电商系统，专注于前后端产品MVP，提供完整的电商核心功能。
 
@@ -52,40 +52,13 @@ go run cmd/server/main.go
 - **3306**: MySQL数据库
 - **6379**: Redis缓存
 
-### 访问地址
-
-- **前端主页**: http://localhost:8080
-- **登录页面**: http://localhost:8080/views/login.html
-- **商品页面**: http://localhost:8080/views/products.html
-- **购物车**: http://localhost:8080/views/cart.html
-- **订单管理**: http://localhost:8080/views/orders.html
-- **管理后台**: http://localhost:8080/admin/dashboard.html
-- **API测试**: http://localhost:8080/views/test-api.html
-
-### 演示账户
-
-- **管理员**: admin / admin123
-- **普通用户**: user1 / password123
-
-### 🤖 AI购物助手
+### 🤖 AI购物助手 (Feature)
 
 - **功能**: 智能购物咨询、商品推荐、平台帮助
 - **使用**: 登录后点击右下角AI助手按钮
 - **服务**: 基于豆包模型的专业电商AI助手
 
-## 📱 功能演示
-
-### 用户界面
-
-- **主页**: 项目介绍和功能展示
-- **登录注册**: 用户认证和账户管理
-- **商品浏览**: 商品列表、搜索、分类筛选
-- **购物车**: 商品添加、数量调整、价格计算
-- **订单管理**: 订单创建、状态跟踪、支付操作
-
 ## 🏗️ 系统架构
-
-### MVP架构
 
 ```txt
 ┌─────────────────┐
@@ -100,13 +73,6 @@ go run cmd/server/main.go
 │   数据存储层      │  ← MySQL + Redis
 └─────────────────┘
 ```
-
-### 端口配置
-
-- **前端服务**: 8080 (Nginx)
-- **后端API**: 8081 (Go Gin)
-- **MySQL**: 3306
-- **Redis**: 6379
 
 ## 📊 核心特性
 
@@ -187,19 +153,9 @@ POST /api/v1/ai/chat    # AI聊天接口
 GET /api/v1/ai/chat
 ```
 
-## 🧪 测试
-
 ### API测试
 
 访问 `http://localhost:8080/views/test-api.html`进行在线API测试
-
-### 功能测试
-
-1. 用户注册登录
-2. 商品浏览和搜索
-3. 购物车操作
-4. 订单创建和管理
-5. 管理后台功能
 
 ## 🤝 贡献指南
 
