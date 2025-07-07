@@ -4,9 +4,15 @@
 
 ## 🌟 项目特色
 
+### 🤖 AI购物助手 (Feature)
+
+- **功能**: 智能购物咨询、商品推荐、平台帮助
+- **使用**: 登录后点击右下角AI助手按钮
+- **服务**: 基于豆包模型的专业电商AI助手
+
 ### 技术架构
 
-- **后端**: Go 1.19+ + Gin框架 + GORM
+- **后端**: Go + Gin框架 + GORM
 - **数据库**: MySQL 8.0 + Redis 7.0
 - **前端**: HTML5 + CSS3 + JavaScript + Bootstrap 5
 - **部署**: Docker + Docker Compose
@@ -50,12 +56,6 @@ go run cmd/server/main.go
 - **8083**: AI服务 (eino-minimal)
 - **3306**: MySQL数据库
 - **6379**: Redis缓存
-
-### 🤖 AI购物助手 (Feature)
-
-- **功能**: 智能购物咨询、商品推荐、平台帮助
-- **使用**: 登录后点击右下角AI助手按钮
-- **服务**: 基于豆包模型的专业电商AI助手
 
 ## 🏗️ 系统架构
 
