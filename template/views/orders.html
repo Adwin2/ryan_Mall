@@ -313,16 +313,30 @@
             try {
                 // 先获取购物车信息
                 const cartResponse = await api.get('/cart');
-                
+
                 if (cartResponse.code !== 200 || !cartResponse.data.items || cartResponse.data.items.length === 0) {
                     Utils.showToast('购物车是空的，无法创建订单', 'warning');
                     return;
                 }
 
+                // 提取购物车商品ID列表
+                const cartItemIds = cartResponse.data.items.map(item => item.id);
+
                 // 创建订单
                 const orderResponse = await api.post('/orders', {
-                    // 这里可以添加收货地址等信息
-                    note: '从购物车创建的订单'
+                    cart_item_ids: cartItemIds,
+                    shipping_address: {
+                        name: "默认收货人",
+                        phone: "13800138000",
+                        province: "北京市",
+                        city: "北京市",
+                        district: "朝阳区",
+                        address: "默认地址",
+                        zipcode: "100000"
+                    },
+                    payment_method: "alipay",
+                    contact_phone: "13800138000",
+                    remark: "从购物车创建的订单"
                 });
 
                 if (orderResponse.code === 200) {
@@ -402,7 +416,7 @@
                     </div>
                     <div class="order-body">
                         <div class="order-items">
-                            ${order.items ? order.items.map(item => `
+                            ${order.order_items ? order.order_items.map(item => `
                                 <div class="order-item">
                                     <div class="product-image">
                                         <i class="bi bi-image"></i>
@@ -410,7 +424,7 @@
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1">${item.product_name}</h6>
                                         <p class="text-muted small mb-1">单价: ¥${item.price} × ${item.quantity}</p>
-                                        <span class="badge bg-light text-dark">小计: ¥${(item.price * item.quantity).toFixed(2)}</span>
+                                        <span class="badge bg-light text-dark">小计: ¥${item.total_price.toFixed(2)}</span>
                                     </div>
                                 </div>
                             `).join('') : '<p class="text-muted">暂无商品信息</p>'}
@@ -524,14 +538,14 @@
                     <div class="col-md-6">
                         <h6>商品清单</h6>
                         <div class="order-items">
-                            ${order.items ? order.items.map(item => `
+                            ${order.order_items ? order.order_items.map(item => `
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div>
                                         <div class="fw-bold">${item.product_name}</div>
                                         <small class="text-muted">¥${item.price} × ${item.quantity}</small>
                                     </div>
                                     <div class="text-end">
-                                        <strong>¥${(item.price * item.quantity).toFixed(2)}</strong>
+                                        <strong>¥${item.total_price.toFixed(2)}</strong>
                                     </div>
                                 </div>
                             `).join('') : '<p class="text-muted">暂无商品信息</p>'}
@@ -673,6 +687,7 @@
             `;
         }
     </script>
+    <script src="/static/js/app.js"></script>
     <script src="/static/js/ai-chat.js"></script>
 </body>
 </html>

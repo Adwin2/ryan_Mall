@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "ryan-mall-microservices/api/proto/order";
+
+import "google/protobuf/timestamp.proto";
+
+// 订单服务
+service OrderService {
+  // 创建订单
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  
+  // 确认订单
+  rpc ConfirmOrder(ConfirmOrderRequest) returns (ConfirmOrderResponse);
+  
+  // 取消订单
+  rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);
+  
+  // 获取订单详情
+  rpc GetOrderDetail(GetOrderDetailRequest) returns (GetOrderDetailResponse);
+  
+  // 获取用户订单列表
+  rpc ListUserOrders(ListUserOrdersRequest) returns (ListUserOrdersResponse);
+  
+  // 更新收货地址
+  rpc UpdateShippingAddress(UpdateShippingAddressRequest) returns (UpdateShippingAddressResponse);
+  
+  // 获取订单统计
+  rpc GetOrderStatistics(GetOrderStatisticsRequest) returns (GetOrderStatisticsResponse);
+  
+  // 搜索订单
+  rpc SearchOrders(SearchOrdersRequest) returns (SearchOrdersResponse);
+}
+
+// 创建订单请求
+message CreateOrderRequest {
+  string user_id = 1;
+  repeated OrderItem items = 2;
+  string shipping_address = 3;
+}
+
+// 订单项
+message OrderItem {
+  string product_id = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+// 创建订单响应
+message CreateOrderResponse {
+  string order_id = 1;
+  string user_id = 2;
+  double total_amount = 3;
+  string status = 4;
+}
+
+// 确认订单请求
+message ConfirmOrderRequest {
+  string order_id = 1;
+}
+
+// 确认订单响应
+message ConfirmOrderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 取消订单请求
+message CancelOrderRequest {
+  string order_id = 1;
+  string reason = 2;
+}
+
+// 取消订单响应
+message CancelOrderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 获取订单详情请求
+message GetOrderDetailRequest {
+  string order_id = 1;
+}
+
+// 获取订单详情响应
+message GetOrderDetailResponse {
+  OrderDetail order = 1;
+}
+
+// 订单详情
+message OrderDetail {
+  string order_id = 1;
+  string user_id = 2;
+  string status = 3;
+  double total_amount = 4;
+  string shipping_address = 5;
+  string cancel_reason = 6;
+  repeated OrderItemDetail items = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// 订单项详情
+message OrderItemDetail {
+  string product_id = 1;
+  string product_name = 2;
+  int32 quantity = 3;
+  double price = 4;
+  double total_price = 5;
+}
+
+// 获取用户订单列表请求
+message ListUserOrdersRequest {
+  string user_id = 1;
+  string status = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+// 获取用户订单列表响应
+message ListUserOrdersResponse {
+  repeated OrderListItem orders = 1;
+  int64 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+  int32 total_pages = 5;
+}
+
+// 订单列表项
+message OrderListItem {
+  string order_id = 1;
+  string status = 2;
+  double total_amount = 3;
+  int32 item_count = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// 更新收货地址请求
+message UpdateShippingAddressRequest {
+  string order_id = 1;
+  string shipping_address = 2;
+}
+
+// 更新收货地址响应
+message UpdateShippingAddressResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 获取订单统计请求
+message GetOrderStatisticsRequest {
+  string user_id = 1;
+}
+
+// 获取订单统计响应
+message GetOrderStatisticsResponse {
+  OrderStatistics statistics = 1;
+}
+
+// 订单统计
+message OrderStatistics {
+  int64 total_orders = 1;
+  int64 pending_orders = 2;
+  int64 completed_orders = 3;
+  int64 cancelled_orders = 4;
+  double total_amount = 5;
+}
+
+// 搜索订单请求
+message SearchOrdersRequest {
+  string user_id = 1;
+  string status = 2;
+  int64 start_date = 3;
+  int64 end_date = 4;
+  double min_amount = 5;
+  double max_amount = 6;
+  int32 page = 7;
+  int32 page_size = 8;
+}
+
+// 搜索订单响应
+message SearchOrdersResponse {
+  repeated OrderListItem orders = 1;
+  int64 total = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+  int32 total_pages = 5;
+}

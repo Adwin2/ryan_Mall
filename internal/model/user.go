@@ -9,7 +9,7 @@ import (
 // User 用户模型
 // 使用GORM的标签来定义数据库映射和验证规则
 type User struct {
-	ID           uint      `json:"id" gorm:"primaryKey"`                                    // 用户ID，主键
+	ID           uint      `json:"id" gorm:"primaryKey;autoIncrement;not null"`                                    // 用户ID，主键
 	Username     string    `json:"username" gorm:"uniqueIndex;size:50;not null"`           // 用户名，唯一索引，最大50字符
 	Email        string    `json:"email" gorm:"uniqueIndex;size:100;not null"`             // 邮箱，唯一索引
 	PasswordHash string    `json:"-" gorm:"column:password_hash;size:255;not null"`        // 密码哈希（json:"-"表示不序列化到JSON）

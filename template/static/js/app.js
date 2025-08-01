@@ -2,7 +2,7 @@
 
 // API配置
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:8081/api/v1',
+    BASE_URL: 'http://localhost:8080/api/v1',
     TIMEOUT: 10000
 };
 

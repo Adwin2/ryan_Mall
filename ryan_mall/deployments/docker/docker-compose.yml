@@ -1,0 +1,250 @@
+version: '3.8'
+
+services:
+  # 基础设施服务
+  mysql:
+    image: mysql:8.0
+    container_name: ryan-mall-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: ryan_mall
+      MYSQL_USER: ryan_mall
+      MYSQL_PASSWORD: ryan_mall123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ryan-mall-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ryan-mall-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ryan-mall-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # 监控服务
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ryan-mall-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - ryan-mall-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ryan-mall-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ryan-mall-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: ryan-mall-jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+      - "6831:6831/udp"
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    networks:
+      - ryan-mall-network
+
+  # 应用服务
+  gateway:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/gateway.Dockerfile
+    container_name: ryan-mall-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - REDIS_ADDRESS=redis:6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - PROMETHEUS_ENABLED=true
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - redis
+      - prometheus
+      - jaeger
+    networks:
+      - ryan-mall-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  user-service:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/user-service.Dockerfile
+    container_name: ryan-mall-user-service
+    ports:
+      - "8081:8081"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=ryan_mall
+      - DB_USER=ryan_mall
+      - DB_PASSWORD=ryan_mall123
+      - REDIS_ADDRESS=redis:6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - mysql
+      - redis
+      - jaeger
+    networks:
+      - ryan-mall-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  product-service:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/product-service.Dockerfile
+    container_name: ryan-mall-product-service
+    ports:
+      - "8082:8082"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=ryan_mall
+      - DB_USER=ryan_mall
+      - DB_PASSWORD=ryan_mall123
+      - REDIS_ADDRESS=redis:6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - mysql
+      - redis
+      - jaeger
+    networks:
+      - ryan-mall-network
+
+  order-service:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/order-service.Dockerfile
+    container_name: ryan-mall-order-service
+    ports:
+      - "8083:8083"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=ryan_mall
+      - DB_USER=ryan_mall
+      - DB_PASSWORD=ryan_mall123
+      - REDIS_ADDRESS=redis:6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - mysql
+      - redis
+      - jaeger
+    networks:
+      - ryan-mall-network
+
+  seckill-service:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/seckill-service.Dockerfile
+    container_name: ryan-mall-seckill-service
+    ports:
+      - "8084:8084"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=ryan_mall
+      - DB_USER=ryan_mall
+      - DB_PASSWORD=ryan_mall123
+      - REDIS_ADDRESS=redis:6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - mysql
+      - redis
+      - jaeger
+    networks:
+      - ryan-mall-network
+
+  payment-service:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/payment-service.Dockerfile
+    container_name: ryan-mall-payment-service
+    ports:
+      - "8085:8085"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=ryan_mall
+      - DB_USER=ryan_mall
+      - DB_PASSWORD=ryan_mall123
+      - REDIS_ADDRESS=redis:6379
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    depends_on:
+      - mysql
+      - redis
+      - jaeger
+    networks:
+      - ryan-mall-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  ryan-mall-network:
+    driver: bridge

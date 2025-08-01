@@ -65,8 +65,8 @@ func LoadConfig() *Config {
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "3306"),
-			Username: getEnv("DB_USERNAME", "ryan_mall"),
-			Password: getEnv("DB_PASSWORD", "RyanMall123!"),
+			Username: getEnv("DB_USERNAME", "root"),
+			Password: getEnv("DB_PASSWORD", "123456"),
 			DBName:   getEnv("DB_NAME", "ryan_mall"),
 		},
 		Redis: RedisConfig{

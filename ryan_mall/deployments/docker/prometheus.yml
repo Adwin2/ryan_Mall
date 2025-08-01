@@ -1,0 +1,74 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # API网关监控
+  - job_name: 'gateway'
+    static_configs:
+      - targets: ['gateway:8080']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # 用户服务监控
+  - job_name: 'user-service'
+    static_configs:
+      - targets: ['user-service:8081']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # 商品服务监控
+  - job_name: 'product-service'
+    static_configs:
+      - targets: ['product-service:8082']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # 订单服务监控
+  - job_name: 'order-service'
+    static_configs:
+      - targets: ['order-service:8083']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # 秒杀服务监控
+  - job_name: 'seckill-service'
+    static_configs:
+      - targets: ['seckill-service:8084']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # 支付服务监控
+  - job_name: 'payment-service'
+    static_configs:
+      - targets: ['payment-service:8085']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # Redis监控（如果有redis_exporter）
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 15s
+
+  # MySQL监控（如果有mysqld_exporter）
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysqld-exporter:9104']
+    scrape_interval: 15s
+
+# 告警规则配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093

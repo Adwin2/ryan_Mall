@@ -16,7 +16,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # API基础URL
-API_BASE="http://localhost:8081"
+API_BASE="http://localhost:8080"
 
 # 检查后端服务是否运行
 check_backend() {

@@ -1,0 +1,44 @@
+{"level":"info","timestamp":"2025-07-30T16:08:58.615+0800","caller":"infrastructure/logger.go:154","message":"Service registered","service":"user-service","address":"localhost","port":8081}
+{"level":"info","timestamp":"2025-07-30T16:08:58.615+0800","caller":"infrastructure/logger.go:154","message":"Service registered","service":"product-service","address":"localhost","port":8082}
+{"level":"info","timestamp":"2025-07-30T16:08:58.615+0800","caller":"infrastructure/logger.go:154","message":"Service registered","service":"order-service","address":"localhost","port":8083}
+{"level":"info","timestamp":"2025-07-30T16:08:58.615+0800","caller":"infrastructure/logger.go:154","message":"Service registered","service":"seckill-service","address":"localhost","port":8084}
+{"level":"info","timestamp":"2025-07-30T16:08:58.615+0800","caller":"infrastructure/logger.go:154","message":"Service registered","service":"payment-service","address":"localhost","port":8085}
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /health                   --> main.main.func1 (8 handlers)
+[GIN-debug] GET    /metrics                  --> main.main.(*PrometheusMetrics).MetricsHandler.func9 (8 handlers)
+[GIN-debug] GET    /gateway/services         --> main.main.func2 (8 handlers)
+[GIN-debug] GET    /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] POST   /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] PUT    /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] PATCH  /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] HEAD   /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] OPTIONS /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] DELETE /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] CONNECT /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+[GIN-debug] TRACE  /api/*path                --> main.main.(*ProxyManager).ProxyHandler.func10 (8 handlers)
+{"level":"info","timestamp":"2025-07-30T16:08:58.616+0800","caller":"infrastructure/logger.go:154","message":"Starting API Gateway","port":8080,"environment":"development"}
+{"level":"info","timestamp":"2025-07-30T16:08:58.734+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"dd9318cf-74e9-4fe1-8d56-334a53a168e2","method":"GET","path":"/health","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T16:08:58.734+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"dd9318cf-74e9-4fe1-8d56-334a53a168e2","method":"GET","path":"/health","status":200,"duration":0.000062084,"response_size":61}
+[GIN] 2025/07/30 - 16:08:58 | 200 |      113.35µs |       127.0.0.1 | GET      "/health"
+{"level":"info","timestamp":"2025-07-30T19:08:01.283+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"fb9b4d9a-27c8-48ef-b493-b40ccb783d14","method":"GET","path":"/health","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:08:01.283+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"fb9b4d9a-27c8-48ef-b493-b40ccb783d14","method":"GET","path":"/health","status":200,"duration":0.000073364,"response_size":61}
+[GIN] 2025/07/30 - 19:08:01 | 200 |     157.192µs |       127.0.0.1 | GET      "/health"
+{"level":"info","timestamp":"2025-07-30T19:08:01.432+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"348e1d90-38d8-4fa5-9299-5895c58eacb7","method":"GET","path":"/health","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:08:01.432+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"348e1d90-38d8-4fa5-9299-5895c58eacb7","method":"GET","path":"/health","status":200,"duration":0.00004572,"response_size":61}
+[GIN] 2025/07/30 - 19:08:01 | 200 |      99.701µs |       127.0.0.1 | GET      "/health"
+{"level":"info","timestamp":"2025-07-30T19:08:01.438+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"4ea07de9-a33f-461b-ae61-380cf48fd401","method":"POST","path":"/api/v1/users/register","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:08:01.495+0800","caller":"infrastructure/logger.go:154","message":"Request proxied","service":"user-service","path":"/api/v1/users/register","target":"localhost","duration":0.057343812}
+{"level":"info","timestamp":"2025-07-30T19:08:01.495+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"4ea07de9-a33f-461b-ae61-380cf48fd401","method":"POST","path":"/api/v1/users/register","status":201,"duration":0.057433019,"response_size":169}
+[GIN] 2025/07/30 - 19:08:01 | 201 |   57.500564ms |       127.0.0.1 | POST     "/api/v1/users/register"
+{"level":"info","timestamp":"2025-07-30T19:08:01.507+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"cbf533d3-82f7-4305-8f32-4d5f9bd37808","method":"GET","path":"/metrics","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:08:01.508+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"cbf533d3-82f7-4305-8f32-4d5f9bd37808","method":"GET","path":"/metrics","status":200,"duration":0.000969157,"response_size":14073}
+[GIN] 2025/07/30 - 19:08:01 | 200 |    1.045052ms |       127.0.0.1 | GET      "/metrics"
+{"level":"info","timestamp":"2025-07-30T19:08:01.527+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"7a24124f-501c-4348-8fb2-24651b30a8e3","method":"GET","path":"/health","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:08:01.527+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"7a24124f-501c-4348-8fb2-24651b30a8e3","method":"GET","path":"/health","status":200,"duration":0.000053494,"response_size":61}
+[GIN] 2025/07/30 - 19:08:01 | 200 |     105.873µs |       127.0.0.1 | GET      "/health"
+{"level":"info","timestamp":"2025-07-30T19:25:44.690+0800","caller":"infrastructure/logger.go:154","message":"Request started","request_id":"93dc7d84-4ed4-415a-a6ed-d74249dca39b","method":"GET","path":"/health","query":"","user_agent":"curl/7.68.0","client_ip":"127.0.0.1"}
+{"level":"info","timestamp":"2025-07-30T19:25:44.690+0800","caller":"infrastructure/logger.go:154","message":"Request completed","request_id":"93dc7d84-4ed4-415a-a6ed-d74249dca39b","method":"GET","path":"/health","status":200,"duration":0.000071034,"response_size":61}
+[GIN] 2025/07/30 - 19:25:44 | 200 |     133.624µs |       127.0.0.1 | GET      "/health"

@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ryan-mall-config
+  namespace: ryan-mall
+data:
+  # 数据库配置
+  DB_HOST: "mysql-service"
+  DB_PORT: "3306"
+  DB_NAME: "ryan_mall"
+  DB_USER: "ryan_mall"
+  
+  # Redis配置
+  REDIS_ADDRESS: "redis-service:6379"
+  
+  # 应用配置
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "info"
+  
+  # 监控配置
+  PROMETHEUS_ENABLED: "true"
+  JAEGER_AGENT_HOST: "jaeger-service"
+  JAEGER_AGENT_PORT: "6831"
+  
+  # 服务端口配置
+  GATEWAY_PORT: "8080"
+  USER_SERVICE_PORT: "8081"
+  PRODUCT_SERVICE_PORT: "8082"
+  ORDER_SERVICE_PORT: "8083"
+  SECKILL_SERVICE_PORT: "8084"
+  PAYMENT_SERVICE_PORT: "8085"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: ryan-mall
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'gateway'
+        static_configs:
+          - targets: ['gateway-service:8080']
+        metrics_path: '/metrics'
+        scrape_interval: 5s
+
+      - job_name: 'user-service'
+        static_configs:
+          - targets: ['user-service:8081']
+        metrics_path: '/metrics'
+        scrape_interval: 5s
+
+      - job_name: 'product-service'
+        static_configs:
+          - targets: ['product-service:8082']
+        metrics_path: '/metrics'
+        scrape_interval: 5s
+
+      - job_name: 'order-service'
+        static_configs:
+          - targets: ['order-service:8083']
+        metrics_path: '/metrics'
+        scrape_interval: 5s
+
+      - job_name: 'seckill-service'
+        static_configs:
+          - targets: ['seckill-service:8084']
+        metrics_path: '/metrics'
+        scrape_interval: 5s
+
+      - job_name: 'payment-service'
+        static_configs:
+          - targets: ['payment-service:8085']
+        metrics_path: '/metrics'
+        scrape_interval: 5s

@@ -198,7 +198,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // API基础URL
-        const API_BASE = 'http://localhost:8081/api/v1';
+        const API_BASE = 'http://localhost:8080/api/v1';
         
         // 当前页面状态
         let currentPage = 1;
@@ -358,7 +358,7 @@
                                 <p><strong>分类:</strong> ${selectedProduct.category?.name || '未分类'}</p>
                                 <p><strong>状态:</strong> 
                                     <span class="badge ${selectedProduct.status === 'active' ? 'bg-success' : 'bg-secondary'}">
-                                        ${selectedProduct.status === 'active' ? '在售' : '下架'}
+                                        ${selectedProduct.status === 1 ? '在售' : '下架'}
                                     </span>
                                 </p>
                             </div>
@@ -514,6 +514,7 @@
             }
         });
     </script>
+    <script src="/static/js/app.js"></script>
     <script src="/static/js/ai-chat.js"></script>
 </body>
 </html>

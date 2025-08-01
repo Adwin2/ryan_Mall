@@ -1,0 +1,4 @@
+
+2025/07/30 16:08:24 [35m/home/raymond/桌面/ryan_Mall/ryan_mall/cmd/user/main.go:147
+[0m[31m[error] [0mfailed to initialize database, got error Error 1045 (28000): Access denied for user 'ryan_mall'@'localhost' (using password: YES)
+{"level":"fatal","timestamp":"2025-07-30T16:08:24.881+0800","caller":"infrastructure/logger.go:169","message":"Failed to connect to database","error":"Error 1045 (28000): Access denied for user 'ryan_mall'@'localhost' (using password: YES)","stacktrace":"ryan-mall-microservices/internal/shared/infrastructure.(*ZapLogger).Fatal\n\t/home/raymond/桌面/ryan_Mall/ryan_mall/internal/shared/infrastructure/logger.go:169\nmain.main\n\t/home/raymond/桌面/ryan_Mall/ryan_mall/cmd/user/main.go:38\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}

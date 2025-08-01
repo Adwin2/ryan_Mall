@@ -79,6 +79,7 @@ func main() {
 	categoryService := service.NewCategoryService(categoryRepo)
 	cartService := service.NewCartService(cartRepo, productRepo)
 	orderService := service.NewOrderService(orderRepo, cartRepo, productRepo, database.GetDB())
+	
 	aiService := service.NewAIService()
 
 	// 创建HTTP处理器
@@ -117,7 +118,6 @@ func main() {
 	r.StaticFile("/orders.html", "./template/views/orders.html")
 
 	// 7. 设置基础路由
-	// 这是一个健康检查接口，用于确认服务是否正常运行
 	r.GET("/ping", func(c *gin.Context) {
 		response.Success(c, gin.H{
 			"message": "pong",
@@ -133,6 +133,7 @@ func main() {
 	// 8. 设置API路由组
 	// 使用路由组可以为一组路由添加统一的前缀和中间件
 	v1 := r.Group("/api/v1")
+	// v1.Use(authMiddleware.OptionalAuth())
 	{
 		// 注册用户相关路由
 		userHandler.RegisterRoutes(v1, authMiddleware)

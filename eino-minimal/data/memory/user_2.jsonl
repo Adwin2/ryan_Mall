@@ -1,0 +1,2 @@
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"\n你好呀！欢迎来到Ryan Mall~我是你的购物助手，有什么可以帮你的呢？无论是商品咨询、购物推荐，还是订单相关的问题，都可以跟我说哦~","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":286,"completion_tokens":88,"total_tokens":374}},"extra":{"ark-reasoning-content":"用户向购物助手打招呼“你好”，根据系统设定，需要以友好亲切的语气回应，目前只需进行问候和表示可以提供帮助，不需要使用工具，直接按照服务准则进行回复即可。\n","ark-request-id":"02175394775317458b0806391d762b2128207c3c3cf049d5d61ab"}}
