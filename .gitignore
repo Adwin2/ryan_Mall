@@ -2,4 +2,8 @@
 tmp/
 .env
 todo/
-.augment*
+.claude/
+.comate/
+.*-mcp/
+.DS_Store
+eino-minimal/data/memory/

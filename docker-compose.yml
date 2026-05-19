@@ -19,7 +19,7 @@ services:
       MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
       # 映射端口：主机端口:容器端口
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       # 数据持久化：将数据存储在本地目录
       - mysql_data:/var/lib/mysql
@@ -64,11 +64,26 @@ services:
     networks:
       - ryan-mall-network
 
+  # Qdrant 向量数据库 (Multi-Agent 长期记忆)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: ryan-mall-qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - ryan-mall-network
+
 # 数据卷定义
 volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  qdrant_data:
     driver: local
 
 # 网络定义

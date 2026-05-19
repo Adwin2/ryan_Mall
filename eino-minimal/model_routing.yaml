@@ -1,0 +1,73 @@
+profiles:
+  deepseek-v3:
+    provider: ark
+    model: deepseek-v3-250324
+    max_tokens: 32768
+    temperature: 0.7
+    max_history_turns: 10
+    use_summary: true
+    use_semantic_recall: true
+    max_recall_facts: 5
+
+  deepseek-v3-terminus:
+    provider: ark
+    model: deepseek-v3-1-terminus
+    max_tokens: 16384
+    temperature: 0.7
+    max_history_turns: 8
+    use_summary: true
+    use_semantic_recall: true
+    max_recall_facts: 3
+
+  doubao-seed-2-pro:
+    provider: ark
+    model: doubao-seed-2-0-pro-260215
+    max_tokens: 8192
+    temperature: 0.8
+    max_history_turns: 6
+    use_summary: true
+    use_semantic_recall: false
+    max_recall_facts: 0
+
+  doubao-seed-2-lite:
+    provider: ark
+    model: doubao-seed-2-0-lite-260428
+    max_tokens: 4096
+    temperature: 0.9
+    max_history_turns: 4
+    use_summary: true
+    use_semantic_recall: false
+    max_recall_facts: 0
+
+  doubao-seed-2-mini:
+    provider: ark
+    model: doubao-seed-2-0-mini-260428
+    max_tokens: 4096
+    temperature: 0.9
+    max_history_turns: 4
+    use_summary: false
+    use_semantic_recall: false
+    max_recall_facts: 0
+
+rules:
+  - agent: ops
+    tier: strong
+    variants:
+      - { profile: deepseek-v3, weight: 70 }
+      - { profile: deepseek-v3-terminus, weight: 30 }
+
+  - agent: ops
+    tier: fast
+    variants:
+      - { profile: doubao-seed-2-lite, weight: 80 }
+      - { profile: doubao-seed-2-mini, weight: 20 }
+
+  - agent: consumer
+    tier: strong
+    variants:
+      - { profile: doubao-seed-2-pro, weight: 100 }
+
+  - agent: consumer
+    tier: fast
+    variants:
+      - { profile: doubao-seed-2-mini, weight: 100 }
