@@ -3,34 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryan Mall - 电商系统</title>
+    <title>Ryan Mall</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 0;
-        }
-        .feature-card {
-            transition: transform 0.3s;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        .api-endpoint {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            margin: 10px 0;
-        }
-    </style>
+    <link href="/static/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="bi bi-shop"></i> Ryan Mall</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -42,13 +22,13 @@
                         <a class="nav-link active" href="#home">首页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">功能特性</a>
+                        <a class="nav-link" href="#features">功能</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#api">API文档</a>
+                        <a class="nav-link" href="#api">API</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#demo">在线演示</a>
+                        <a class="nav-link" href="#demo">体验</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -63,177 +43,185 @@
         </div>
     </nav>
 
-    <!-- 英雄区域 -->
-    <section id="home" class="hero-section text-center">
+    <!-- Hero -->
+    <section id="home" class="hero-section">
         <div class="container">
-            <h1 class="display-4 fw-bold mb-4">Ryan Mall 电商系统</h1>
-            <p class="lead mb-4">基于Go语言开发的现代化电商后端系统</p>
-            <p class="mb-4">采用分层架构设计，提供完整的用户管理、商品管理、购物车和订单功能</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="#demo" class="btn btn-light btn-lg"><i class="bi bi-play-circle"></i> 在线演示</a>
-                <a href="#api" class="btn btn-outline-light btn-lg"><i class="bi bi-code-slash"></i> API文档</a>
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <p class="text-accent fw-500 mb-3 fade-in-up stagger-1" style="font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">Modern E-Commerce Platform</p>
+                    <h1 class="mb-4 fade-in-up stagger-2">在线购物，<br>简约而不简单。</h1>
+                    <p class="lead mb-5 fade-in-up stagger-3">基于 Go 语言构建的现代电商系统，采用分层架构设计，<br>提供完整的用户管理、商品管理、购物车与订单功能。</p>
+                    <div class="d-flex gap-3 fade-in-up stagger-4">
+                        <a href="products.html" class="btn btn-primary btn-lg">浏览商品</a>
+                        <a href="#api" class="btn btn-outline-secondary btn-lg">API 文档</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+                    <div style="width: 320px; height: 320px; background: var(--bg-elevated); border-radius: var(--radius-xl); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center;" class="fade-in-up stagger-5">
+                        <i class="bi bi-bag-heart" style="font-size: 5rem; color: var(--accent); opacity: 0.7;"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 功能特性 -->
-    <section id="features" class="py-5">
+    <!-- Features -->
+    <section id="features" class="py-5" style="padding: 96px 0;">
         <div class="container">
-            <h2 class="text-center mb-5">核心功能特性</h2>
+            <div class="text-center mb-5">
+                <p class="text-accent fw-500 mb-2" style="font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">Core Features</p>
+                <h2 style="font-size: 2rem; letter-spacing: -0.02em;">核心功能</h2>
+            </div>
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
-                    <div class="card feature-card h-100 text-center p-4">
-                        <div class="card-body">
-                            <i class="bi bi-person-circle display-4 text-primary mb-3"></i>
-                            <h5 class="card-title">用户系统</h5>
-                            <p class="card-text">注册、登录、JWT认证、个人信息管理</p>
-                        </div>
+                    <div class="feature-card h-100">
+                        <i class="bi bi-person-circle display-4"></i>
+                        <h5 class="card-title">用户系统</h5>
+                        <p class="card-text">注册、登录、JWT 认证、个人信息管理</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card feature-card h-100 text-center p-4">
-                        <div class="card-body">
-                            <i class="bi bi-box-seam display-4 text-success mb-3"></i>
-                            <h5 class="card-title">商品系统</h5>
-                            <p class="card-text">商品CRUD、分类管理、搜索筛选、库存管理</p>
-                        </div>
+                    <div class="feature-card h-100">
+                        <i class="bi bi-box-seam display-4"></i>
+                        <h5 class="card-title">商品系统</h5>
+                        <p class="card-text">商品 CRUD、分类管理、搜索筛选、库存管理</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card feature-card h-100 text-center p-4">
-                        <div class="card-body">
-                            <i class="bi bi-cart3 display-4 text-warning mb-3"></i>
-                            <h5 class="card-title">购物车系统</h5>
-                            <p class="card-text">添加商品、数量管理、智能合并、实时验证</p>
-                        </div>
+                    <div class="feature-card h-100">
+                        <i class="bi bi-cart3 display-4"></i>
+                        <h5 class="card-title">购物车</h5>
+                        <p class="card-text">添加商品、数量管理、智能合并、实时验证</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card feature-card h-100 text-center p-4">
-                        <div class="card-body">
-                            <i class="bi bi-receipt display-4 text-info mb-3"></i>
-                            <h5 class="card-title">订单系统</h5>
-                            <p class="card-text">完整下单流程、支付模拟、状态管理、库存扣减</p>
-                        </div>
+                    <div class="feature-card h-100">
+                        <i class="bi bi-receipt display-4"></i>
+                        <h5 class="card-title">订单系统</h5>
+                        <p class="card-text">完整下单流程、支付模拟、状态管理、库存扣减</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 技术栈 -->
-    <section class="py-5 bg-light">
+    <!-- Tech Stack -->
+    <section class="bg-section" style="padding: 80px 0;">
         <div class="container">
-            <h2 class="text-center mb-5">技术栈</h2>
-            <div class="row text-center">
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-code-square display-4 text-primary"></i>
-                        <h6 class="mt-2">Go + Gin</h6>
+            <div class="text-center mb-5">
+                <p class="text-accent fw-500 mb-2" style="font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">Technology</p>
+                <h2 style="font-size: 2rem; letter-spacing: -0.02em;">技术栈</h2>
+            </div>
+            <div class="row justify-content-center g-4">
+                <div class="col-6 col-md-2 text-center">
+                    <div style="padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <i class="bi bi-code-square" style="font-size: 1.8rem; color: var(--accent);"></i>
+                        <p style="margin-top: 12px; margin-bottom: 0; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);">Go + Gin</p>
                     </div>
                 </div>
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-database display-4 text-success"></i>
-                        <h6 class="mt-2">MySQL + GORM</h6>
+                <div class="col-6 col-md-2 text-center">
+                    <div style="padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <i class="bi bi-database" style="font-size: 1.8rem; color: var(--accent);"></i>
+                        <p style="margin-top: 12px; margin-bottom: 0; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);">MySQL</p>
                     </div>
                 </div>
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-shield-check display-4 text-warning"></i>
-                        <h6 class="mt-2">JWT认证</h6>
+                <div class="col-6 col-md-2 text-center">
+                    <div style="padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <i class="bi bi-shield-check" style="font-size: 1.8rem; color: var(--accent);"></i>
+                        <p style="margin-top: 12px; margin-bottom: 0; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);">JWT</p>
                     </div>
                 </div>
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-layers display-4 text-info"></i>
-                        <h6 class="mt-2">分层架构</h6>
+                <div class="col-6 col-md-2 text-center">
+                    <div style="padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <i class="bi bi-speedometer2" style="font-size: 1.8rem; color: var(--accent);"></i>
+                        <p style="margin-top: 12px; margin-bottom: 0; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);">Redis</p>
                     </div>
                 </div>
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-speedometer2 display-4 text-danger"></i>
-                        <h6 class="mt-2">Redis缓存</h6>
-                    </div>
-                </div>
-                <div class="col-md-2 col-6 mb-4">
-                    <div class="p-3">
-                        <i class="bi bi-docker display-4 text-primary"></i>
-                        <h6 class="mt-2">Docker部署</h6>
+                <div class="col-6 col-md-2 text-center">
+                    <div style="padding: 24px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                        <i class="bi bi-box" style="font-size: 1.8rem; color: var(--accent);"></i>
+                        <p style="margin-top: 12px; margin-bottom: 0; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);">Docker</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- API文档预览 -->
-    <section id="api" class="py-5">
+    <!-- API Preview -->
+    <section id="api" style="padding: 96px 0;">
         <div class="container">
-            <h2 class="text-center mb-5">API接口预览</h2>
-            <div class="row">
+            <div class="text-center mb-5">
+                <p class="text-accent fw-500 mb-2" style="font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">REST API</p>
+                <h2 style="font-size: 2rem; letter-spacing: -0.02em;">接口预览</h2>
+            </div>
+            <div class="row g-5">
                 <div class="col-md-6">
-                    <h4><i class="bi bi-person"></i> 用户相关API</h4>
-                    <div class="api-endpoint">
-                        <strong>POST</strong> /api/v1/register - 用户注册
-                    </div>
-                    <div class="api-endpoint">
-                        <strong>POST</strong> /api/v1/login - 用户登录
-                    </div>
-                    <div class="api-endpoint">
-                        <strong>GET</strong> /api/v1/profile - 获取个人信息
+                    <h5 style="font-family: var(--font-display); font-weight: 600; margin-bottom: 20px;"><i class="bi bi-person text-accent"></i> 用户 API</h5>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden;">
+                        <div style="padding: 14px 20px; border-bottom: 1px solid var(--divider); font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #4a9e6f; margin-right: 12px;">POST</span> /api/v1/register
+                        </div>
+                        <div style="padding: 14px 20px; border-bottom: 1px solid var(--divider); font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #4a9e6f; margin-right: 12px;">POST</span> /api/v1/login
+                        </div>
+                        <div style="padding: 14px 20px; font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #5b8fa8; margin-right: 12px;">GET</span> /api/v1/profile
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <h4><i class="bi bi-box"></i> 商品相关API</h4>
-                    <div class="api-endpoint">
-                        <strong>GET</strong> /api/v1/products - 获取商品列表
-                    </div>
-                    <div class="api-endpoint">
-                        <strong>GET</strong> /api/v1/products/:id - 获取商品详情
-                    </div>
-                    <div class="api-endpoint">
-                        <strong>POST</strong> /api/v1/products - 创建商品
+                    <h5 style="font-family: var(--font-display); font-weight: 600; margin-bottom: 20px;"><i class="bi bi-box text-accent"></i> 商品 API</h5>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow: hidden;">
+                        <div style="padding: 14px 20px; border-bottom: 1px solid var(--divider); font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #5b8fa8; margin-right: 12px;">GET</span> /api/v1/products
+                        </div>
+                        <div style="padding: 14px 20px; border-bottom: 1px solid var(--divider); font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #5b8fa8; margin-right: 12px;">GET</span> /api/v1/products/:id
+                        </div>
+                        <div style="padding: 14px 20px; font-size: 0.88rem;">
+                            <span style="font-weight: 600; color: #4a9e6f; margin-right: 12px;">POST</span> /api/v1/products
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary">查看完整API文档</a>
             </div>
         </div>
     </section>
 
-    <!-- 在线演示 -->
-    <section id="demo" class="py-5 bg-light">
+    <!-- Demo -->
+    <section id="demo" class="bg-section" style="padding: 96px 0;">
         <div class="container">
-            <h2 class="text-center mb-5">在线演示</h2>
-            <div class="row g-4">
+            <div class="text-center mb-5">
+                <p class="text-accent fw-500 mb-2" style="font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">Try It Out</p>
+                <h2 style="font-size: 2rem; letter-spacing: -0.02em;">在线体验</h2>
+            </div>
+            <div class="row g-4 justify-content-center">
                 <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="bi bi-person-plus display-4 text-primary mb-3"></i>
-                            <h5 class="card-title">用户注册登录</h5>
-                            <p class="card-text">体验用户注册、登录和个人信息管理功能</p>
+                    <div class="card text-center h-100">
+                        <div class="card-body" style="padding: 40px 28px;">
+                            <i class="bi bi-person-plus" style="font-size: 2rem; color: var(--accent); margin-bottom: 16px; display: block;"></i>
+                            <h5 style="font-family: var(--font-display); font-weight: 600; margin-bottom: 8px;">登录注册</h5>
+                            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 24px;">体验用户注册、登录和个人信息管理功能</p>
                             <a href="login.html" class="btn btn-primary">立即体验</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="bi bi-shop display-4 text-success mb-3"></i>
-                            <h5 class="card-title">商品浏览</h5>
-                            <p class="card-text">浏览商品列表、查看详情、搜索筛选</p>
-                            <a href="products.html" class="btn btn-success">浏览商品</a>
+                    <div class="card text-center h-100">
+                        <div class="card-body" style="padding: 40px 28px;">
+                            <i class="bi bi-shop" style="font-size: 2rem; color: var(--accent); margin-bottom: 16px; display: block;"></i>
+                            <h5 style="font-family: var(--font-display); font-weight: 600; margin-bottom: 8px;">浏览商品</h5>
+                            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 24px;">浏览商品列表、查看详情、搜索筛选</p>
+                            <a href="products.html" class="btn btn-primary">浏览商品</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="bi bi-gear display-4 text-warning mb-3"></i>
-                            <h5 class="card-title">管理后台</h5>
-                            <p class="card-text">商品管理、订单管理、数据统计</p>
-                            <a href="/admin/dashboard.html" class="btn btn-warning">管理后台</a>
+                    <div class="card text-center h-100">
+                        <div class="card-body" style="padding: 40px 28px;">
+                            <i class="bi bi-gear" style="font-size: 2rem; color: var(--accent); margin-bottom: 16px; display: block;"></i>
+                            <h5 style="font-family: var(--font-display); font-weight: 600; margin-bottom: 8px;">管理后台</h5>
+                            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 24px;">商品管理、订单管理、数据统计</p>
+                            <a href="/admin/dashboard.html" class="btn btn-primary">进入后台</a>
                         </div>
                     </div>
                 </div>
@@ -241,16 +229,16 @@
         </div>
     </section>
 
-    <!-- 页脚 -->
-    <footer class="bg-dark text-light py-4">
+    <!-- Footer -->
+    <footer>
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6">
                     <h5><i class="bi bi-shop"></i> Ryan Mall</h5>
-                    <p>基于Go语言开发的现代化电商系统</p>
+                    <p>基于 Go 语言构建的现代化电商系统</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p>&copy; 2024 Ryan Mall. 技术栈：Go + Gin + MySQL + Redis</p>
+                    <p style="margin-bottom: 0;">&copy; 2024 Ryan Mall &middot; Go + Gin + MySQL + Redis</p>
                 </div>
             </div>
         </div>
