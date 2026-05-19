@@ -1,0 +1,65 @@
+[
+  {
+    "category": "女装",
+    "period": "2025-05 last_30d",
+    "daily_avg_uv": 12000,
+    "daily_avg_pv": 48000,
+    "overall_cvr": 0.032,
+    "avg_aov": 189.5,
+    "new_customer_ratio": 0.15,
+    "repurchase_rate": 0.35,
+    "top_channels": [
+      {"channel": "搜索", "uv": 4800, "cvr": 0.045, "aov": 210, "share": 0.40},
+      {"channel": "信息流", "uv": 3600, "cvr": 0.018, "aov": 165, "share": 0.30},
+      {"channel": "直播", "uv": 2400, "cvr": 0.038, "aov": 178, "share": 0.20},
+      {"channel": "站内push", "uv": 1200, "cvr": 0.025, "aov": 195, "share": 0.10}
+    ],
+    "trend_vs_prev": {
+      "uv_change": 0.05,
+      "cvr_change": -0.02,
+      "aov_change": 0.03
+    }
+  },
+  {
+    "category": "数码",
+    "period": "2025-05 last_30d",
+    "daily_avg_uv": 8500,
+    "daily_avg_pv": 25000,
+    "overall_cvr": 0.022,
+    "avg_aov": 850,
+    "new_customer_ratio": 0.22,
+    "repurchase_rate": 0.18,
+    "top_channels": [
+      {"channel": "搜索", "uv": 3400, "cvr": 0.032, "aov": 920, "share": 0.40},
+      {"channel": "信息流", "uv": 2550, "cvr": 0.015, "aov": 750, "share": 0.30},
+      {"channel": "直播", "uv": 1700, "cvr": 0.025, "aov": 680, "share": 0.20},
+      {"channel": "比价平台", "uv": 850, "cvr": 0.012, "aov": 1100, "share": 0.10}
+    ],
+    "trend_vs_prev": {
+      "uv_change": -0.03,
+      "cvr_change": 0.01,
+      "aov_change": 0.08
+    }
+  },
+  {
+    "category": "食品",
+    "period": "2025-05 last_30d",
+    "daily_avg_uv": 18000,
+    "daily_avg_pv": 54000,
+    "overall_cvr": 0.058,
+    "avg_aov": 68.5,
+    "new_customer_ratio": 0.28,
+    "repurchase_rate": 0.52,
+    "top_channels": [
+      {"channel": "直播", "uv": 7200, "cvr": 0.072, "aov": 55, "share": 0.40},
+      {"channel": "搜索", "uv": 5400, "cvr": 0.048, "aov": 75, "share": 0.30},
+      {"channel": "信息流", "uv": 3600, "cvr": 0.042, "aov": 62, "share": 0.20},
+      {"channel": "站内push", "uv": 1800, "cvr": 0.065, "aov": 85, "share": 0.10}
+    ],
+    "trend_vs_prev": {
+      "uv_change": 0.12,
+      "cvr_change": 0.05,
+      "aov_change": -0.01
+    }
+  }
+]

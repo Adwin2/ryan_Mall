@@ -1,0 +1,74 @@
+[
+  {
+    "segment_id": "seg_women_high_value",
+    "name": "高价值老客",
+    "category": "女装",
+    "size": 12000,
+    "percentage": 0.15,
+    "avg_spend": 580,
+    "frequency": 2.8,
+    "pref_channel": "搜索",
+    "price_range": "200-800",
+    "features": ["品牌敏感", "高复购", "偏好新品", "客单价高"]
+  },
+  {
+    "segment_id": "seg_women_potential_new",
+    "name": "潜力新客",
+    "category": "女装",
+    "size": 35000,
+    "percentage": 0.42,
+    "avg_spend": 0,
+    "frequency": 0,
+    "pref_channel": "信息流",
+    "price_range": "50-200",
+    "features": ["价格敏感", "首次浏览", "偏好爆款", "社交触达"]
+  },
+  {
+    "segment_id": "seg_women_dormant",
+    "name": "沉睡老客",
+    "category": "女装",
+    "size": 18000,
+    "percentage": 0.22,
+    "avg_spend": 320,
+    "frequency": 0.3,
+    "pref_channel": "站内push",
+    "price_range": "100-400",
+    "features": ["90天未购", "曾经活跃", "对促销响应高", "偏好折扣"]
+  },
+  {
+    "segment_id": "seg_women_casual",
+    "name": "随机浏览者",
+    "category": "女装",
+    "size": 25000,
+    "percentage": 0.30,
+    "avg_spend": 85,
+    "frequency": 0.5,
+    "pref_channel": "直播",
+    "price_range": "30-150",
+    "features": ["低意向", "高跳出率", "直播冲动消费", "客单价低"]
+  },
+  {
+    "segment_id": "seg_electronics_enthusiast",
+    "name": "数码发烧友",
+    "category": "数码",
+    "size": 8000,
+    "percentage": 0.18,
+    "avg_spend": 2200,
+    "frequency": 1.2,
+    "pref_channel": "搜索",
+    "price_range": "500-5000",
+    "features": ["参数导向", "比价习惯", "偏好新品首发", "评论驱动"]
+  },
+  {
+    "segment_id": "seg_electronics_new_need",
+    "name": "刚需新客",
+    "category": "数码",
+    "size": 22000,
+    "percentage": 0.50,
+    "avg_spend": 0,
+    "frequency": 0,
+    "pref_channel": "信息流",
+    "price_range": "200-1500",
+    "features": ["明确需求", "价格敏感", "品牌认知弱", "以旧换新意向"]
+  }
+]
